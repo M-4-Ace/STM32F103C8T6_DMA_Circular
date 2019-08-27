@@ -229,9 +229,8 @@ void DMA1_Channel5_IRQHandler(void)
   /* USER CODE BEGIN DMA1_Channel5_IRQn 0 */
 
   /* USER CODE END DMA1_Channel5_IRQn 0 */
-//  HAL_DMA_IRQHandler(&hdma_usart1_rx);
-
-	/* USER CODE BEGIN DMA1_Channel5_IRQn 1 */
+  HAL_DMA_IRQHandler(&hdma_usart1_rx);
+  /* USER CODE BEGIN DMA1_Channel5_IRQn 1 */
 	DMA_IrqHandler_Uart1_Rx(&hdma_usart1_rx, &huart1);
   /* USER CODE END DMA1_Channel5_IRQn 1 */
 }
@@ -244,7 +243,7 @@ void DMA1_Channel6_IRQHandler(void)
   /* USER CODE BEGIN DMA1_Channel6_IRQn 0 */
 
   /* USER CODE END DMA1_Channel6_IRQn 0 */
-//  HAL_DMA_IRQHandler(&hdma_usart2_rx);
+  HAL_DMA_IRQHandler(&hdma_usart2_rx);
   /* USER CODE BEGIN DMA1_Channel6_IRQn 1 */
   DMA_IrqHandler_Uart2_Rx(&hdma_usart2_rx, &huart2);
   /* USER CODE END DMA1_Channel6_IRQn 1 */
@@ -272,7 +271,7 @@ void USART1_IRQHandler(void)
   /* USER CODE BEGIN USART1_IRQn 0 */
 
   /* USER CODE END USART1_IRQn 0 */
-//  HAL_UART_IRQHandler(&huart1);
+  HAL_UART_IRQHandler(&huart1);
   /* USER CODE BEGIN USART1_IRQn 1 */
 	USART_IrqHandler_Uart_1(&huart1, &hdma_usart1_rx);
   /* USER CODE END USART1_IRQn 1 */
@@ -286,7 +285,7 @@ void USART2_IRQHandler(void)
   /* USER CODE BEGIN USART2_IRQn 0 */
 
   /* USER CODE END USART2_IRQn 0 */
-//  HAL_UART_IRQHandler(&huart2);
+  HAL_UART_IRQHandler(&huart2);
   /* USER CODE BEGIN USART2_IRQn 1 */
 	USART_IrqHandler_Uart_2(&huart2, &hdma_usart2_rx);
 

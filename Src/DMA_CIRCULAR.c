@@ -37,7 +37,7 @@ size_t len, tocopy;
 uint8_t* ptr;
 
 extern uint8_t check_value;
-
+uint8_t state=0;
 uint8_t check_for (char *string)
 {
 	uint16_t so_far = 0;
@@ -115,13 +115,41 @@ void DMA_IrqHandler_Uart1_Rx (DMA_HandleTypeDef *hdma, UART_HandleTypeDef *huart
         Write += tocopy;
         len -= tocopy;
         ptr += tocopy;
-
+        state++;
+        uint8_t ack1[] = {0x10,0x31};
+        uint8_t selecting[]= {0x04,0x40,0x41,0x05};
+        uint8_t lock[] = {0x02,0x40,0x41,0x30,0x30,0x36,0x30,0x03};
 		/* UNCOMMENT BELOW TO transmit the data via uart */
-        set_transmit_mode_uart2();
-        HAL_UART_Transmit(&huart2, &UART_Buffer[Write-tocopy], tocopy, 10);
-        set_receive_mode_uart1();
-        set_receive_mode_uart2();
-
+        switch(state){
+        case 1:
+        	set_transmit_mode_uart1();
+        	HAL_UART_Transmit(&huart1, ack1, 2, 10);
+            set_receive_mode_uart1();
+    		set_receive_mode_uart2();
+    		break;
+        case 2:
+            set_transmit_mode_uart1();
+            HAL_UART_Transmit(&huart1, selecting, 4, 10);
+            set_receive_mode_uart1();
+           	set_receive_mode_uart2();
+           	break;
+        case 3:
+            set_transmit_mode_uart1();
+            HAL_UART_Transmit(&huart1, lock, 8, 10);
+            set_receive_mode_uart1();
+           	set_receive_mode_uart2();
+           	break;
+        default:
+        	set_transmit_mode_uart2();
+   	        HAL_UART_Transmit(&huart2,&UART_Buffer[Write-tocopy], tocopy, 10);
+   	        set_receive_mode_uart1();
+            set_receive_mode_uart2();
+            break;
+        }
+//        set_transmit_mode_uart1();
+//        HAL_UART_Transmit(&huart1, ack1, 2, 10);
+//        set_receive_mode_uart1();
+//		  set_receive_mode_uart2();
 
 
 		check_value = check_for ("pinku");
@@ -134,10 +162,11 @@ void DMA_IrqHandler_Uart1_Rx (DMA_HandleTypeDef *hdma, UART_HandleTypeDef *huart
 
 						/* UNCOMMENT BELOW TO transmit the data via uart */
             			set_transmit_mode_uart2();
-						HAL_UART_Transmit(&huart2, UART_Buffer, len, 10);  // transmit the remaining data
+//						HAL_UART_Transmit(&huart2, UART_Buffer, len, 10);  // transmit the remaining data
 						set_receive_mode_uart1();
-				        set_receive_mode_uart2();
-				 }
+						set_receive_mode_uart2();
+
+				}
 
 		/* Prepare DMA for next transfer */
         /* Important! DMA stream won't start if all flags are not cleared first */
@@ -186,13 +215,12 @@ void DMA_IrqHandler_Uart2_Rx (DMA_HandleTypeDef *hdma, UART_HandleTypeDef *huart
         Write += tocopy;
         len -= tocopy;
         ptr += tocopy;
-		
+
 		/* UNCOMMENT BELOW TO transmit the data via uart */
         set_transmit_mode_uart1();
         HAL_UART_Transmit(&huart1, &UART_Buffer[Write-tocopy], tocopy, 10);
         set_receive_mode_uart2();
-        set_receive_mode_uart1();
-
+		set_receive_mode_uart1();
 
 		
 		check_value = check_for ("pinku");
@@ -207,7 +235,7 @@ void DMA_IrqHandler_Uart2_Rx (DMA_HandleTypeDef *hdma, UART_HandleTypeDef *huart
             			set_transmit_mode_uart1();
 						HAL_UART_Transmit(&huart1, UART_Buffer, len, 10);  // transmit the remaining data
 						set_receive_mode_uart2();
-				        set_receive_mode_uart1();
+						set_receive_mode_uart1();
 
         }
 		

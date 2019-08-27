@@ -1,5 +1,5 @@
 DMA_CIRCULAR.c:41:9:check_for	12	static
-DMA_CIRCULAR.c:81:6:DMA_IrqHandler_Uart1_Rx	48	static
+DMA_CIRCULAR.c:81:6:DMA_IrqHandler_Uart1_Rx	64	static
 DMA_CIRCULAR.c:56:6:USART_IrqHandler_Uart_1	16	static
-DMA_CIRCULAR.c:152:6:DMA_IrqHandler_Uart2_Rx	48	static
+DMA_CIRCULAR.c:181:6:DMA_IrqHandler_Uart2_Rx	48	static
 DMA_CIRCULAR.c:68:6:USART_IrqHandler_Uart_2	16	static
