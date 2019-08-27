@@ -37,6 +37,7 @@
 #define DMA_RX_BUFFER_SIZE          256
 
 #define UART_BUFFER_SIZE            256
+#define TXID0POLLING				4
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -58,6 +59,7 @@ uint8_t DMA_RX_Buffer[DMA_RX_BUFFER_SIZE];
 uint8_t UART_Buffer[UART_BUFFER_SIZE];
 uint16_t check_value =0;
 
+uint8_t id0pooling[]={0x04,0x40,0x51,0x05};
 
 /* USER CODE END PV */
 
@@ -133,6 +135,12 @@ int main(void)
   MX_USART1_UART_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
+
+  	 set_transmit_mode_uart1();
+  	 HAL_UART_Transmit(&huart1, id0pooling,TXID0POLLING,10);
+
+
+
 	__HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);   // enable idle line interrupt
 	__HAL_UART_ENABLE_IT(&huart2, UART_IT_IDLE);   // enable idle line interrupt
 	__HAL_DMA_ENABLE_IT (&hdma_usart1_rx, DMA_IT_TC);  // enable DMA Tx cplt interrupt
