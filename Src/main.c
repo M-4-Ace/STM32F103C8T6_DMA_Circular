@@ -95,6 +95,8 @@ void esp_at (void)
 	set_transmit_mode_uart1();
 	char *string = "AT\r\n";
 	HAL_UART_Transmit (&huart1, (uint8_t *)string, 4, 200);
+	set_transmit_mode_uart2();
+	HAL_UART_Transmit (&huart2, (uint8_t *)string, 4, 200);
 }
 /* USER CODE END 0 */
 
@@ -132,13 +134,21 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 	__HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);   // enable idle line interrupt
+	__HAL_UART_ENABLE_IT(&huart2, UART_IT_IDLE);   // enable idle line interrupt
 	__HAL_DMA_ENABLE_IT (&hdma_usart1_rx, DMA_IT_TC);  // enable DMA Tx cplt interrupt
+	__HAL_DMA_ENABLE_IT (&hdma_usart2_rx, DMA_IT_TC);  // enable DMA Tx cplt interrupt
 
 	set_receive_mode_uart1();
-	HAL_UART_Receive_DMA (&huart1, DMA_RX_Buffer, DMA_RX_BUFFER_SIZE);
+
+	HAL_UART_Receive_DMA (&huart1, DMA_RX_Buffer, DMA_RX_BUFFER_SIZE); //receive
+
+
+	set_receive_mode_uart2();
+
+	HAL_UART_Receive_DMA(&huart2, DMA_RX_Buffer, DMA_RX_BUFFER_SIZE);
+
 	__HAL_DMA_DISABLE_IT(&hdma_usart1_rx, DMA_IT_HT); 	// disable half complete interrupt
-
-
+	__HAL_DMA_DISABLE_IT(&hdma_usart2_rx, DMA_IT_HT); 	// disable half complete interrupt
 
 
   /* USER CODE END 2 */
